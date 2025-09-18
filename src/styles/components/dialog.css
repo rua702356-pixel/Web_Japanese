@@ -1,0 +1,274 @@
+/* ===========================================
+   ENHANCED DIALOG COMPONENT STYLES
+   Modern, Beautiful & Accessible Design
+   =========================================== */
+
+/* Color Variables */
+:root {
+  --dialog-primary: #4f46e5;
+  --dialog-secondary: #7c3aed;
+  --dialog-accent: #06b6d4;
+  --dialog-success: #10b981;
+  --dialog-warning: #f59e0b;
+  --dialog-danger: #ef4444;
+  --dialog-background: #ffffff;
+  --dialog-surface: #f8fafc;
+  --dialog-border: #e2e8f0;
+  --dialog-text: #1e293b;
+  --dialog-text-muted: #64748b;
+  --dialog-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --dialog-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --dialog-radius: 16px;
+  --dialog-radius-lg: 20px;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dialog-background: #0f172a;
+    --dialog-surface: #1e293b;
+    --dialog-border: #334155;
+    --dialog-text: #f1f5f9;
+    --dialog-text-muted: #94a3b8;
+  }
+}
+
+/* Dialog Styles */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.dialog-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 24rem;
+  position: relative;
+}
+
+.dialog-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dialog-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+  color: #111827;
+  margin: 0;
+}
+
+.dialog-body {
+  padding: 1.5rem;
+}
+
+.dialog-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: #6b7280;
+}
+
+.dialog-close:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+/* Enhanced Close Button */
+.dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, var(--dialog-danger) 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 12px rgba(239, 68, 68, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.dialog-close:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 
+    0 8px 25px rgba(239, 68, 68, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dialog-close:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+.dialog-close:focus {
+  outline: 2px solid var(--dialog-primary);
+  outline-offset: 2px;
+}
+
+/* Dialog Content Variants */
+.dialog-content.compact {
+  max-height: 75vh;
+}
+
+.dialog-content.compact .dialog-body {
+  padding: 1rem 1.5rem;
+}
+
+.dialog-content.compact .dialog-header {
+  padding: 1rem 1.5rem 0.75rem 1.5rem;
+}
+
+.dialog-content.compact .dialog-footer {
+  padding: 0.75rem 1.5rem 1rem 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .dialog-overlay {
+    padding: 0.5rem;
+  }
+  
+  .dialog-content {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: var(--dialog-radius);
+  }
+  
+  .dialog-header,
+  .dialog-body,
+  .dialog-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .dialog-title {
+    font-size: 1.25rem;
+  }
+  
+  .dialog-close {
+    width: 2rem;
+    height: 2rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+  
+  .dialog-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  .dialog-footer > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dialog-content {
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+  
+  .dialog-overlay {
+    padding: 0;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dialog-content {
+    border: 2px solid var(--dialog-text);
+  }
+  
+  .dialog-header,
+  .dialog-footer {
+    border-color: var(--dialog-text);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dialog-overlay,
+  .dialog-content,
+  .dialog-close {
+    animation: none;
+    transition: none;
+  }
+  
+  .dialog-header::after {
+    display: none;
+  }
+}
+
+/* Focus management for accessibility */
+.dialog-content:focus {
+  outline: none;
+}
+
+.dialog-content[data-focus-visible] {
+  outline: 2px solid var(--dialog-primary);
+  outline-offset: -2px;
+}
+
+/* Dialog loading state */
+.dialog-content.loading {
+  pointer-events: none;
+}
+
+.dialog-content.loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+/* Success state */
+.dialog-content.success .dialog-header::before {
+  background: linear-gradient(90deg, var(--dialog-success), #059669);
+}
+
+/* Warning state */
+.dialog-content.warning .dialog-header::before {
+  background: linear-gradient(90deg, var(--dialog-warning), #d97706);
+}
+
+/* Error state */
+.dialog-content.error .dialog-header::before {
+  background: linear-gradient(90deg, var(--dialog-danger), #dc2626);
+}

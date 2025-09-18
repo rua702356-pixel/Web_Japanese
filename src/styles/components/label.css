@@ -1,0 +1,14 @@
+﻿/* Label Styles */
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.label-required::after {
+  content: " *";
+  color: #ef4444;
+}

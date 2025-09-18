@@ -1,0 +1,549 @@
+/* ===========================================
+   MODERN INDEX PAGE DESIGN SYSTEM
+   =========================================== */
+
+:root {
+  --index-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+  --index-gradient-secondary: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+  --index-gradient-accent: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  --index-glass: rgba(255, 255, 255, 0.1);
+  --index-glass-border: rgba(255, 255, 255, 0.2);
+  --index-shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --index-shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.15);
+  --index-radius: 1.5rem;
+  --index-radius-lg: 2rem;
+  --index-spacing: 4rem;
+}
+
+.index-page {
+  position: relative;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+/* Modern Hero Section */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+}
+
+.hero-section > .container-xl {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+}
+
+/* Modern Dashboard Section */
+.dashboard-section {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--index-spacing) 0;
+  position: relative;
+}
+
+.dashboard-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-section h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: var(--index-gradient-primary);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 8s ease infinite;
+}
+
+.welcome-section p {
+  font-size: 1.1rem;
+  color: var(--muted-foreground);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Modern Stats Grid */
+.stats-grid {
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.stats-grid .card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--index-radius);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-grid .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.stats-grid .card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--index-shadow-strong);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.stats-grid .card:hover::before {
+  left: 100%;
+}
+
+/* Modern Quick Actions */
+.quick-actions-card {
+  margin-bottom: 3rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--index-radius-lg);
+  position: relative;
+  z-index: 2;
+}
+
+.quick-action-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: auto;
+  border-radius: var(--index-radius);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--index-gradient-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.quick-action-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--index-shadow-soft);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.quick-action-btn:hover::before {
+  opacity: 0.1;
+}
+
+.quick-action-btn .text-left {
+  text-align: left;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Modern Activity Section */
+.activity-section {
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.activity-section .card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--index-radius);
+}
+
+.activity-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.activity-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: var(--index-gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.activity-item:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(8px) scale(1.01);
+  box-shadow: var(--index-shadow-soft);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.activity-item:hover::before {
+  opacity: 1;
+}
+
+/* Modern Learning Dashboard Section */
+.learning-dashboard-section {
+  padding: var(--index-spacing) 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  position: relative;
+}
+
+.learning-dashboard-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(245, 87, 108, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Modern Content Sections */
+.alphabet-section,
+.vocabulary-section,
+.jlpt-section {
+  padding: var(--index-spacing) 0;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.alphabet-section::before,
+.vocabulary-section::before,
+.jlpt-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.grammar-section,
+.practice-section,
+.dictionary-section {
+  padding: var(--index-spacing) 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.grammar-section::before,
+.practice-section::before,
+.dictionary-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Modern Toggle Section */
+.toggle-section {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.8) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.toggle-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Modern Section Dividers */
+.section + .section {
+  position: relative;
+}
+
+.section + .section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 2px;
+  background: var(--index-gradient-primary);
+  border-radius: 1px;
+  opacity: 0.3;
+}
+
+/* Modern Gradient Animations */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Modern Responsive Design */
+@media (max-width: 768px) {
+  :root {
+    --index-spacing: 2.5rem;
+    --index-radius: 1rem;
+    --index-radius-lg: 1.25rem;
+  }
+  
+  .hero-section {
+    padding: 0;
+  }
+  
+  .dashboard-section,
+  .learning-dashboard-section,
+  .alphabet-section,
+  .grammar-section,
+  .vocabulary-section,
+  .practice-section,
+  .jlpt-section,
+  .dictionary-section {
+    padding: var(--index-spacing) 0;
+  }
+  
+  .welcome-section {
+    margin-bottom: 2rem;
+  }
+  
+  .welcome-section h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .quick-action-btn {
+    padding: 1rem;
+  }
+  
+  .activity-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .stats-grid .card:hover {
+    transform: translateY(-12px) scale(1.03);
+  }
+  
+  .quick-action-btn:hover {
+    transform: translateY(-6px) scale(1.03);
+  }
+}
+
+/* Enhanced Animations */
+.dashboard-section > .container-xl > * {
+  animation: floatUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.dashboard-section > .container-xl > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.dashboard-section > .container-xl > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dashboard-section > .container-xl > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.dashboard-section > .container-xl > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.dashboard-section > .container-xl > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+/* Modern Scroll and Focus Enhancements */
+.section {
+  scroll-margin-top: 100px;
+  position: relative;
+}
+
+/* Enhanced Focus Styles */
+.quick-action-btn:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.4);
+  outline-offset: 4px;
+  box-shadow: 
+    0 0 0 3px rgba(102, 126, 234, 0.1),
+    var(--index-shadow-soft);
+}
+
+.activity-item:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.4);
+  outline-offset: 4px;
+  box-shadow: 
+    0 0 0 3px rgba(102, 126, 234, 0.1),
+    var(--index-shadow-soft);
+}
+
+/* Modern Button Styles */
+.section .btn-primary {
+  background: var(--index-gradient-primary);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: var(--index-radius);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--index-shadow-soft);
+  background-size: 200% 200%;
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .stats-grid .card,
+  .quick-action-btn,
+  .activity-item {
+    transition: none;
+    animation: none;
+  }
+  
+  .dashboard-section > .container-xl > * {
+    animation: none;
+    opacity: 1;
+  }
+  
+  .welcome-section h2 {
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .stats-grid .card,
+  .quick-actions-card,
+  .activity-section .card {
+    border: 2px solid var(--foreground);
+    background: var(--background);
+  }
+}
+
+/* High-performance optimizations */
+.stats-grid .card,
+.quick-action-btn,
+.activity-item {
+  will-change: transform;
+  contain: layout style;
+}
+
+/* Modern glass morphism refinements */
+@supports (backdrop-filter: blur(10px)) {
+  .dashboard-section,
+  .learning-dashboard-section,
+  .alphabet-section,
+  .grammar-section,
+  .vocabulary-section,
+  .practice-section,
+  .jlpt-section,
+  .dictionary-section,
+  .toggle-section {
+    backdrop-filter: blur(20px);
+  }
+  
+  .stats-grid .card,
+  .quick-actions-card,
+  .activity-section .card {
+    backdrop-filter: blur(10px);
+  }
+}

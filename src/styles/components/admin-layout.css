@@ -1,0 +1,462 @@
+/* Admin Layout Styles */
+.admin-layout {
+  --admin-primary: #3b82f6;
+  --admin-secondary: #8b5cf6;
+  --admin-danger: #ef4444;
+  --admin-success: #10b981;
+  --admin-warning: #f59e0b;
+  --admin-info: #06b6d4;
+  
+  --admin-sidebar-width: 288px;
+  --admin-header-height: 64px;
+  
+  --admin-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --admin-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --admin-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --admin-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Enhanced Sidebar Animations */
+.admin-sidebar {
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.admin-sidebar.open {
+  transform: translateX(0);
+  opacity: 1;
+  animation: slideInLeft 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.admin-sidebar.closing {
+  transform: translateX(-100%);
+  opacity: 0.7;
+  animation: slideOutLeft 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10px) scale(1.02);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: translateX(-10px) scale(0.98);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Navigation Item Hover Effects */
+.admin-nav-item {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.admin-nav-item:hover::before {
+  left: 100%;
+}
+
+.admin-nav-item.active {
+  background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+  box-shadow: var(--admin-shadow-md);
+  transform: translateY(-1px);
+}
+
+.admin-nav-item.active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+}
+
+/* Button Animations */
+.admin-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.admin-button:active {
+  transform: translateY(0);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+/* Enhanced Close Button Animation */
+.admin-close-btn {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.admin-close-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-close-btn:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.admin-close-btn:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.admin-close-btn:hover .close-icon {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.admin-close-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.admin-close-btn:active .close-icon {
+  transform: rotate(90deg) scale(0.9);
+}
+
+.admin-close-btn.closing {
+  transform: scale(0.8) rotate(180deg);
+  opacity: 0.6;
+  background: rgba(239, 68, 68, 0.2) !important;
+}
+
+.admin-close-btn.closing .close-icon {
+  transform: rotate(270deg) scale(0.7);
+}
+
+.close-icon {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-origin: center;
+}
+
+/* Ripple Effect for Close Button */
+.admin-close-btn:active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  border-radius: inherit;
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* User Avatar Animation */
+.admin-user-avatar {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-user-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--admin-primary), var(--admin-secondary), var(--admin-primary));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.admin-user-avatar:hover::before {
+  opacity: 1;
+}
+
+.admin-user-avatar:hover {
+  transform: scale(1.05);
+}
+
+/* Status Indicator Animation */
+.admin-status-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Enhanced Backdrop Effect */
+.admin-backdrop {
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  background: rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.admin-backdrop.closing {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  animation: fadeOut 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}
+
+/* Gradient Text */
+.admin-gradient-text {
+  background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Loading Animation */
+.admin-loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Slide In Animation */
+.admin-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Card Hover Effects */
+.admin-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-xl);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 100vw;
+    max-width: 320px;
+  }
+  
+  .admin-nav-item {
+    padding: 16px 20px;
+    font-size: 16px;
+  }
+  
+  .admin-user-avatar {
+    transform: scale(0.9);
+  }
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .admin-layout {
+    --admin-primary: #60a5fa;
+    --admin-secondary: #a78bfa;
+  }
+  
+  .admin-nav-item.active {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.9), rgba(167, 139, 250, 0.9));
+  }
+  
+  .admin-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Accessibility */
+.admin-nav-item:focus,
+.admin-button:focus,
+.admin-close-btn:focus {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
+}
+
+/* Enhanced Mobile Button Interactions */
+.admin-mobile-trigger {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.admin-mobile-trigger:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.admin-mobile-trigger:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+}
+
+/* Enhanced Header Animation */
+.admin-header {
+  background: linear-gradient(-45deg, #3b82f6, #8b5cf6, #3b82f6, #8b5cf6);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Touch-friendly enhancements */
+@media (pointer: coarse) {
+  .admin-close-btn,
+  .admin-mobile-trigger {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .admin-nav-item {
+    min-height: 48px;
+    padding: 16px 20px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .admin-close-btn {
+    border: 2px solid currentColor;
+  }
+  
+  .admin-nav-item.active {
+    border: 2px solid white;
+  }
+}
+
+/* Focus visible for better accessibility */
+.admin-close-btn:focus-visible,
+.admin-mobile-trigger:focus-visible {
+  outline: 3px solid var(--admin-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.2);
+}
+
+/* Custom scrollbar for sidebar */
+.admin-sidebar nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-sidebar nav::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.admin-sidebar nav::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+  transition: background 0.3s;
+}
+
+.admin-sidebar nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}

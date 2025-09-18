@@ -1,0 +1,26 @@
+/* Progress Styles */
+.progress-container {
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 0.5rem;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+  border-radius: 9999px;
+}
+
+.progress-bar-success {
+  background-color: #10b981;
+}
+
+.progress-bar-warning {
+  background-color: #f59e0b;
+}
+
+.progress-bar-error {
+  background-color: #ef4444;
+}

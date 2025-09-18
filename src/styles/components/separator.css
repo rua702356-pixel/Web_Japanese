@@ -1,0 +1,13 @@
+/* Separator Styles */
+.separator {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 1rem 0;
+}
+
+.separator-vertical {
+  width: 1px;
+  height: auto;
+  background-color: #e5e7eb;
+  margin: 0 1rem;
+}

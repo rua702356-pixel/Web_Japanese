@@ -1,0 +1,25 @@
+/* Import CSS modules */
+@import './styles/layout.css';
+@import './styles/utilities.css';
+@import './styles/variables.css';
+@import './styles/base.css';
+
+/* Import component styles */
+@import './styles/components/page-layout.css';
+@import './styles/components/index-page.css';
+@import './styles/components/button.css';
+@import './styles/components/card.css';
+@import './styles/components/navbar.css';
+@import './styles/components/hero.css';
+@import './styles/components/badge.css';
+@import './styles/components/progress.css';
+@import './styles/components/tabs.css';
+@import './styles/components/dialog.css';
+@import './styles/components/input.css';
+@import './styles/components/separator.css';
+@import './styles/components/toast.css';
+@import './styles/components/label.css';
+@import './styles/components/admin-layout.css';
+@import './styles/components/grammar-form.css';
+@import './styles/components/quiz-form.css';
+@import './styles/components/dictionary.css';
