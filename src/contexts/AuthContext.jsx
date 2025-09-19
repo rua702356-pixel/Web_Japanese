@@ -19,10 +19,10 @@ export const AuthProvider = ({ children }) => {
       try {
         const savedUser = localStorage.getItem('auth_user');
         const savedToken = localStorage.getItem('auth_token');
-        
+
         if (savedUser && savedToken) {
           const userData = JSON.parse(savedUser);
-          
+
           // Validate user data structure
           if (userData && userData.id && userData.email) {
             setUser(userData);
@@ -53,21 +53,94 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     setIsLoading(true);
-    
+
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Find user by email
+
+      // Special case for the requested credentials
+      if (email === 'admin123' && password === '123') {
+        // Create a special admin user
+        const adminUser = {
+          id: '1',
+          username: 'admin123',
+          email: 'admin123',
+          fullName: 'Admin User',
+          role: 'admin',
+          createdAt: '2024-01-01'
+        };
+
+        // Generate mock token
+        const token = `mock_token_${adminUser.id}_${Date.now()}`;
+
+        // Save to localStorage with additional metadata
+        const authData = {
+          user: adminUser,
+          timestamp: Date.now(),
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+        };
+
+        localStorage.setItem('auth_user', JSON.stringify(adminUser));
+        localStorage.setItem('auth_token', token);
+        localStorage.setItem('auth_timestamp', authData.timestamp.toString());
+
+        setUser(adminUser);
+
+        console.log('Admin logged in successfully:', adminUser.username);
+
+        return {
+          success: true,
+          message: 'Đăng nhập thành công!',
+          user: adminUser
+        };
+      }
+
+      if (email === 'user123' && password === '123') {
+        // Create a special regular user
+        const regularUser = {
+          id: '2',
+          username: 'user123',
+          email: 'user123',
+          fullName: 'Regular User',
+          role: 'user',
+          createdAt: '2024-01-02'
+        };
+
+        // Generate mock token
+        const token = `mock_token_${regularUser.id}_${Date.now()}`;
+
+        // Save to localStorage with additional metadata
+        const authData = {
+          user: regularUser,
+          timestamp: Date.now(),
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+        };
+
+        localStorage.setItem('auth_user', JSON.stringify(regularUser));
+        localStorage.setItem('auth_token', token);
+        localStorage.setItem('auth_timestamp', authData.timestamp.toString());
+
+        setUser(regularUser);
+
+        console.log('User logged in successfully:', regularUser.username);
+
+        return {
+          success: true,
+          message: 'Đăng nhập thành công!',
+          user: regularUser
+        };
+      }
+
+      // Find user by email (existing logic)
       const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-      
+
       if (!foundUser) {
         return {
           success: false,
           message: 'Không tìm thấy tài khoản với email này'
         };
       }
-      
+
       // Check password
       const correctPassword = mockPasswords[foundUser.email];
       if (password !== correctPassword) {
@@ -76,25 +149,25 @@ export const AuthProvider = ({ children }) => {
           message: 'Mật khẩu không chính xác'
         };
       }
-      
+
       // Generate mock token
       const token = `mock_token_${foundUser.id}_${Date.now()}`;
-      
+
       // Save to localStorage with additional metadata
       const authData = {
         user: foundUser,
         timestamp: Date.now(),
         expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
       };
-      
+
       localStorage.setItem('auth_user', JSON.stringify(foundUser));
       localStorage.setItem('auth_token', token);
       localStorage.setItem('auth_timestamp', authData.timestamp.toString());
-      
+
       setUser(foundUser);
-      
+
       console.log('User logged in successfully:', foundUser.username);
-      
+
       return {
         success: true,
         message: 'Đăng nhập thành công!',
@@ -112,11 +185,11 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     setIsLoading(true);
-    
+
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Check if email already exists
       const existingUser = mockUsers.find(u => u.email.toLowerCase() === userData.email.toLowerCase());
       if (existingUser) {
@@ -125,7 +198,7 @@ export const AuthProvider = ({ children }) => {
           message: 'Email này đã được đăng ký'
         };
       }
-      
+
       // Check if username already exists
       const existingUsername = mockUsers.find(u => u.username.toLowerCase() === userData.username.toLowerCase());
       if (existingUsername) {
@@ -134,7 +207,7 @@ export const AuthProvider = ({ children }) => {
           message: 'Tên đăng nhập này đã được sử dụng'
         };
       }
-      
+
       // Create new user
       const newUser = {
         id: `user_${Date.now()}`,
@@ -144,29 +217,29 @@ export const AuthProvider = ({ children }) => {
         role: 'user',
         createdAt: new Date().toISOString().split('T')[0]
       };
-      
+
       // Add to mock database
       mockUsers.push(newUser);
       mockPasswords[newUser.email] = userData.password;
-      
+
       // Generate mock token
       const token = `mock_token_${newUser.id}_${Date.now()}`;
-      
+
       // Save to localStorage with metadata
       const authData = {
         user: newUser,
         timestamp: Date.now(),
         expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
       };
-      
+
       localStorage.setItem('auth_user', JSON.stringify(newUser));
       localStorage.setItem('auth_token', token);
       localStorage.setItem('auth_timestamp', authData.timestamp.toString());
-      
+
       setUser(newUser);
-      
+
       console.log('User registered successfully:', newUser.username);
-      
+
       return {
         success: true,
         message: 'Đăng ký thành công!',
@@ -188,13 +261,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('auth_user');
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_remember');
-      
+
       // Clear any other session data
       sessionStorage.clear();
-      
+
       // Reset user state
       setUser(null);
-      
+
       console.log('User successfully logged out');
     } catch (error) {
       console.error('Error during logout:', error);
@@ -213,17 +286,17 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const updatedUser = { ...user, ...data };
-      
+
       // Update in mock database
       const userIndex = mockUsers.findIndex(u => u.id === user.id);
       if (userIndex !== -1) {
         mockUsers[userIndex] = updatedUser;
       }
-      
+
       // Update localStorage
       localStorage.setItem('auth_user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-      
+
       return {
         success: true,
         message: 'Cập nhật thông tin thành công'

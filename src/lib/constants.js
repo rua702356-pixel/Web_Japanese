@@ -6,7 +6,9 @@
 export const MOCK_PASSWORDS = {
   'admin@japanese.com': 'admin123',
   'user@japanese.com': 'user123',
-  'test@japanese.com': 'test123'
+  'test@japanese.com': 'test123',
+  'admin@123': '123',
+  'user@123': '1234'
 };
 
 export const MOCK_USERS = [

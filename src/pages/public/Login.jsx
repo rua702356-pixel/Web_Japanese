@@ -1,29 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import { FaFacebookF } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
   LogIn,
   ArrowLeft,
-  Loader2
+  Loader2,
+  UserPlus,
+
+  X
 } from 'lucide-react';
+import '../../styles/components/login.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated } = useAuth();
   const { toast } = useToast();
-  
+
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    username: ''
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // Redirect if already authenticated
@@ -36,21 +47,34 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = 'Email hoặc tên đăng nhập là bắt buộc';
     }
-    
+
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = 'Mật khẩu là bắt buộc';
+    } else if (formData.password.length < 3) {
+      newErrors.password = 'Mật khẩu phải có ít nhất 3 ký tự';
     }
-    
+
+    // Confirm password validation for signup
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Mật khẩu không khớp';
+    }
+
+    // Full name validation for signup
+    if (!isLogin && !formData.fullName) {
+      newErrors.fullName = 'Họ và tên là bắt buộc';
+    }
+
+    // Username validation for signup
+    if (!isLogin && !formData.username) {
+      newErrors.username = 'Tên đăng nhập là bắt buộc';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,7 +85,7 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -73,43 +97,58 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsLoading(true);
     setErrors({});
-    
+
     try {
-      const result = await login(formData.email, formData.password);
-      
-      if (result.success) {
+      if (isLogin) {
+        // Login logic
+        const result = await login(formData.email, formData.password);
+
+        if (result.success) {
+          toast({
+            title: 'Đăng nhập thành công!',
+            description: `Chào mừng ${result.user?.fullName}`,
+            variant: 'default'
+          });
+
+          // Role-based redirection
+          if (result.user?.role === 'admin') {
+            navigate('/admin', { replace: true });
+          } else {
+            navigate('/dashboard', { replace: true });
+          }
+        } else {
+          setErrors({
+            general: result.message
+          });
+          toast({
+            title: 'Đăng nhập thất bại',
+            description: result.message,
+            variant: 'destructive'
+          });
+        }
+      } else {
+        // Signup logic (simplified for demo)
         toast({
-          title: 'Đăng nhập thành công!',
-          description: `Chào mừng ${result.user?.fullName} trở lại`,
+          title: 'Tài khoản đã được tạo!',
+          description: 'Tài khoản của bạn đã được tạo thành công',
           variant: 'default'
         });
-        
-        // Redirect to intended page or home
-        const from = location.state?.from?.pathname || '/';
-        navigate(from, { replace: true });
-      } else {
-        setErrors({
-          general: result.message
-        });
-        toast({
-          title: 'Đăng nhập thất bại',
-          description: result.message,
-          variant: 'destructive'
-        });
+        // Switch to login after signup
+        setIsLogin(true);
       }
     } catch (error) {
       setErrors({
-        general: 'Có lỗi xảy ra, vui lòng thử lại'
+        general: 'Có lỗi xảy ra. Vui lòng thử lại.'
       });
       toast({
-        title: 'Có lỗi xảy ra',
+        title: 'Lỗi',
         description: 'Vui lòng thử lại sau',
         variant: 'destructive'
       });
@@ -118,172 +157,239 @@ const Login = () => {
     }
   };
 
-  const handleDemoLogin = (email, password) => {
-    setFormData({ email, password });
+  const handleSocialLogin = (provider) => {
+    toast({
+      title: `Đăng nhập ${provider}`,
+      description: `Đang đăng nhập với ${provider}...`,
+      variant: 'default'
+    });
+    // In a real app, this would initiate OAuth flow
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Back to home button */}
-        <div className="flex justify-start">
-          <button
-            className="btn btn-ghost btn-sm flex items-center gap-2"
-            onClick={() => navigate('/')}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Về trang chủ
-          </button>
-        </div>
+    <div className="login-container">
+      <div className="login-content">
+        {/* Close button */}
+        <button
+          className="close-btn"
+          onClick={() => navigate('/')}
+        >
+          <X className="w-4 h-4" />
+        </button>
 
-        <div className="card p-6">
-          <div className="space-y-6">
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <LogIn className="w-8 h-8 text-primary-foreground" />
-              </div>
-              <h1 className="text-2xl font-bold">Đăng nhập</h1>
-              <p className="text-muted-foreground">
-                Đăng nhập để truy cập vào khóa học tiếng Nhật
+        {/* Left side - Form */}
+        <div className="login-left">
+          <div className="form-container">
+            <div className="header">
+              <h1 className="title">
+                HỌC BÀI MỚI CÙNG<br />
+                DUNGMORI NÀO!
+              </h1>
+              <p className="subtitle">
+                Tiếng Nhật khó, đã có Dungmori!<br />
+                Hệ sinh thái Nhật ngữ số 1 dành cho người Việt!
               </p>
             </div>
 
-            {/* Demo accounts */}
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-center">Tài khoản demo:</p>
-              <div className="flex gap-2">
-                <button
-                  className="btn btn-outline btn-sm flex-1"
-                  onClick={() => handleDemoLogin('admin@japanese.com', 'admin123')}
-                  disabled={isLoading}
-                >
-                  Admin
-                </button>
-                <button
-                  className="btn btn-outline btn-sm flex-1"
-                  onClick={() => handleDemoLogin('user@japanese.com', 'user123')}
-                  disabled={isLoading}
-                >
-                  User
-                </button>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="form">
               {/* General error */}
               {errors.general && (
-                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <p className="text-sm text-destructive">{errors.general}</p>
+                <div className="error-message">
+                  <p>{errors.general}</p>
                 </div>
               )}
 
               {/* Email field */}
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Nhập email của bạn"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className={`input ${errors.email ? 'border-destructive' : ''} pl-10`}
-                    disabled={isLoading}
-                  />
-                </div>
+              <div className="input-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="text"
+                  placeholder="Email hoặc tên đăng nhập"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`input ${errors.email ? 'error' : ''}`}
+                  disabled={isLoading}
+                />
                 {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email}</p>
+                  <p className="field-error">{errors.email}</p>
                 )}
               </div>
 
               {/* Password field */}
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Mật khẩu
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Nhập mật khẩu"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className={`input ${errors.password ? 'border-destructive' : ''} pl-10 pr-10`}
-                    disabled={isLoading}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-ghost absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
+              <div className="input-group">
+                <label htmlFor="password">Mật khẩu</label>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Mật khẩu"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className={`input ${errors.password ? 'error' : ''}`}
+                  disabled={isLoading}
+                />
                 {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password}</p>
+                  <p className="field-error">{errors.password}</p>
                 )}
               </div>
+
+              {/* Additional fields for registration */}
+              {!isLogin && (
+                <>
+                  <div className="input-group">
+                    <label htmlFor="fullName">Họ và tên</label>
+                    <input
+                      id="fullName"
+                      name="fullName"
+                      type="text"
+                      placeholder="Nhập họ và tên"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      className={`input ${errors.fullName ? 'error' : ''}`}
+                      disabled={isLoading}
+                    />
+                    {errors.fullName && (
+                      <p className="field-error">{errors.fullName}</p>
+                    )}
+                  </div>
+
+                  <div className="input-group">
+                    <label htmlFor="username">Tên đăng nhập</label>
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      placeholder="Chọn tên đăng nhập"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className={`input ${errors.username ? 'error' : ''}`}
+                      disabled={isLoading}
+                    />
+                    {errors.username && (
+                      <p className="field-error">{errors.username}</p>
+                    )}
+                  </div>
+
+                  <div className="input-group">
+                    <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Xác nhận mật khẩu"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className={`input ${errors.confirmPassword ? 'error' : ''}`}
+                      disabled={isLoading}
+                    />
+                    {errors.confirmPassword && (
+                      <p className="field-error">{errors.confirmPassword}</p>
+                    )}
+                  </div>
+                </>
+              )}
 
               {/* Submit button */}
               <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="submit-btn"
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <>
+                  <div className="flex items-center justify-center">
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Đang đăng nhập...
-                  </>
+                    {isLogin ? 'Đang đăng nhập...' : 'Đang tạo tài khoản...'}
+                  </div>
                 ) : (
-                  <>
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Đăng nhập
-                  </>
+                  isLogin ? 'Đăng nhập' : 'Đăng ký'
                 )}
               </button>
-            </form>
 
-            {/* Register link */}
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                Chưa có tài khoản?{' '}
-                <Link
-                  to="/register"
-                  className="font-medium text-primary hover:underline"
-                >
-                  Đăng ký ngay
-                </Link>
-              </p>
-            </div>
+              {/* Forgot password link (login only) */}
+              {isLogin && (
+                <div className="forgot-password">
+                  <Link to="/forgot-password" className="link">
+                    Quên mật khẩu?
+                  </Link>
+                </div>
+              )}
+
+              {/* Social login */}
+              <div className="social-section">
+                <div className="divider">
+                  <span>Hoặc đăng nhập với</span>
+                </div>
+
+                <div className="social-buttons">
+                  <button
+                    type="button"
+                    className="social-btn facebook"
+                    onClick={() => handleSocialLogin('Facebook')}
+                    disabled={isLoading}
+                  >
+                    <FaFacebookF className="w-5 h-5" />
+                    Facebook
+                  </button>
+
+                  <button
+                    type="button"
+                    className="social-btn google"
+                    onClick={() => handleSocialLogin('Google')}
+                    disabled={isLoading}
+                  >
+                    <FcGoogle className="w-5 h-5" />
+                    Google
+                  </button>
+
+                </div>
+              </div>
+
+              {/* Switch between login/register */}
+              <div className="switch-mode">
+                <p>
+                  {isLogin ? 'Bạn chưa có tài khoản? ' : 'Đã có tài khoản? '}
+                  <button
+                    type="button"
+                    className="switch-link"
+                    onClick={() => setIsLogin(!isLogin)}
+                  >
+                    {isLogin ? 'Đăng ký ngay' : 'Đăng nhập'}
+                  </button>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
 
-        {/* Additional info */}
-        <div className="text-center">
-          <p className="text-xs text-muted-foreground">
-            Bằng việc đăng nhập, bạn đồng ý với{' '}
-            <Link to="/terms" className="underline hover:text-foreground">
-              Điều khoản dịch vụ
-            </Link>{' '}
-            và{' '}
-            <Link to="/privacy" className="underline hover:text-foreground">
-              Chính sách bảo mật
-            </Link>
-          </p>
+        {/* Right side - Branding */}
+        <div className="login-right">
+          <div className="branding">
+            <div className="character">
+              <div className="avatar">
+                <div className="face">
+                  <div className="eyes">
+                    <div className="eye"></div>
+                    <div className="eye"></div>
+                  </div>
+                  <div className="smile"></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="brand-text">
+              <div className="speech-bubble">
+                <p>Hệ sinh thái Nhật<br />Ngữ số 1 dành cho<br />người Việt</p>
+              </div>
+
+              <div className="logo-section">
+                <h2 className="logo">
+                  DUNG<br />MORI
+                </h2>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
